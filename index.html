@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ciclo Zero · 30 dias com o Lucas</title>
+<!-- Pixel Performix -->
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '264800457918824');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=264800457918824&ev=PageView&noscript=1"/></noscript>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  :root{
+    --bg:#0a0a16; --bg2:#11102a;
+    --roxo:#7c3aed; --roxo2:#5b21b6; --azul:#4f46e5;
+    --neon:#a78bfa; --neon2:#818cf8;
+    --txt:#ece9ff; --txt2:#9b96c7;
+    --lock:#1c1b33; --lock-b:#2c2a4d;
+  }
+  html,body{ background:var(--bg); color:var(--txt); font-family:'Segoe UI',system-ui,sans-serif; }
+  body{
+    background:
+      radial-gradient(1200px 600px at 50% -10%, rgba(124,58,237,.28), transparent 60%),
+      radial-gradient(900px 500px at 90% 30%, rgba(79,70,229,.18), transparent 60%),
+      var(--bg);
+    min-height:100vh; overflow-x:hidden;
+  }
+  .wrap{ max-width:520px; margin:0 auto; padding:0 18px 80px; }
+
+  header{ text-align:center; padding:34px 0 12px; }
+  .kicker{
+    display:inline-block; font-size:11px; letter-spacing:3px; text-transform:uppercase;
+    color:var(--neon); border:1px solid rgba(167,139,250,.4); border-radius:99px;
+    padding:5px 14px; margin-bottom:14px; background:rgba(124,58,237,.1);
+  }
+  h1{
+    font-size:46px; line-height:1; font-weight:800; letter-spacing:-1px;
+    background:linear-gradient(120deg,#fff, var(--neon) 60%, var(--neon2));
+    -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+  }
+  .sub{ color:var(--txt2); font-size:14.5px; margin-top:12px; line-height:1.5; }
+  .sub b{ color:var(--txt); font-weight:600; }
+
+  .progress{
+    margin:26px auto 6px; max-width:340px;
+    background:rgba(255,255,255,.06); border-radius:99px; height:12px; overflow:hidden;
+    border:1px solid rgba(255,255,255,.08);
+  }
+  .progress .bar{
+    height:100%; width:0%; border-radius:99px;
+    background:linear-gradient(90deg,var(--azul),var(--roxo),var(--neon));
+    box-shadow:0 0 16px rgba(124,58,237,.7); transition:width .6s cubic-bezier(.2,.8,.2,1);
+  }
+  .progress-label{ text-align:center; font-size:12.5px; color:var(--txt2); margin-bottom:10px; }
+  .progress-label b{ color:var(--neon); font-weight:700; }
+
+  /* trilha */
+  .trail{ position:relative; margin-top:18px; }
+  .trail svg{ position:absolute; inset:0; width:100%; height:100%; z-index:0; pointer-events:none; }
+  .node{
+    position:absolute; width:78px; height:78px; transform:translate(-50%,-50%);
+    z-index:2; cursor:pointer; display:flex; align-items:center; justify-content:center;
+    transition:transform .15s ease;
+  }
+  .node:active{ transform:translate(-50%,-50%) scale(.93); }
+  .disc{
+    width:64px; height:64px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; flex-direction:column;
+    font-weight:800; position:relative;
+  }
+  /* bloqueado */
+  .node.locked .disc{
+    background:var(--lock); border:2px solid #2c2a4d; color:#564f86;
+  }
+  .node.locked .disc .ic{ font-size:22px; opacity:.8; }
+  /* desbloqueado */
+  .node.open .disc{
+    background:linear-gradient(160deg,var(--roxo),var(--azul));
+    border:2px solid var(--neon); color:#fff;
+    box-shadow:0 6px 22px rgba(124,58,237,.55), 0 0 0 6px rgba(124,58,237,.12);
+  }
+  .node.open .disc .num{ font-size:22px; line-height:1; }
+  .node.open .disc .check{ font-size:11px; opacity:.85; margin-top:1px; }
+  /* proximo a abrir (pulsa) */
+  .node.next .disc{
+    background:var(--lock); border:2px solid var(--neon); color:var(--neon);
+    animation:pulse 1.8s infinite;
+  }
+  .node.next .disc .ic{ font-size:22px; }
+  @keyframes pulse{
+    0%,100%{ box-shadow:0 0 0 0 rgba(167,139,250,.45);}
+    50%{ box-shadow:0 0 0 12px rgba(167,139,250,0);}
+  }
+  .node .day-tag{
+    position:absolute; bottom:-16px; left:50%; transform:translateX(-50%);
+    font-size:10.5px; color:var(--txt2); white-space:nowrap; font-weight:600; letter-spacing:.5px;
+  }
+  .node.open .day-tag{ color:var(--neon); }
+
+  .week-flag{
+    position:absolute; z-index:1; left:50%; transform:translateX(-50%);
+    font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--neon2);
+    background:rgba(17,16,42,.85); border:1px solid rgba(129,140,248,.35);
+    padding:5px 14px; border-radius:99px; white-space:nowrap;
+  }
+
+  /* modais */
+  .overlay{
+    position:fixed; inset:0; background:rgba(5,4,14,.78); backdrop-filter:blur(6px);
+    display:none; align-items:center; justify-content:center; z-index:50; padding:20px;
+  }
+  .overlay.show{ display:flex; }
+  .modal{
+    background:linear-gradient(180deg,#16142e,#0f0e22); width:100%; max-width:430px;
+    border:1px solid rgba(167,139,250,.3); border-radius:24px; padding:26px 22px;
+    box-shadow:0 30px 80px rgba(0,0,0,.6); max-height:88vh; overflow-y:auto;
+    animation:pop .25s cubic-bezier(.2,.9,.3,1.2);
+  }
+  @keyframes pop{ from{ transform:scale(.9); opacity:0;} to{ transform:scale(1); opacity:1;} }
+  .modal .x{
+    float:right; font-size:24px; color:var(--txt2); cursor:pointer; line-height:1;
+    border:none; background:none; padding:2px 6px;
+  }
+  .m-day{ font-size:12px; letter-spacing:2px; text-transform:uppercase; color:var(--neon); font-weight:700; }
+  .m-title{ font-size:25px; font-weight:800; margin:6px 0 4px; letter-spacing:-.5px; }
+  .m-week{ font-size:12.5px; color:var(--txt2); margin-bottom:18px; }
+
+  /* lock modal */
+  .lock-emoji{ font-size:44px; text-align:center; margin:4px 0 10px; }
+  .lock-txt{ text-align:center; color:var(--txt2); font-size:14px; line-height:1.5; margin-bottom:18px; }
+  .lock-txt b{ color:var(--txt); }
+  .field{
+    display:flex; gap:8px; margin-top:6px;
+  }
+  .field input{
+    flex:1; background:rgba(255,255,255,.06); border:1.5px solid rgba(167,139,250,.3);
+    border-radius:14px; padding:14px 16px; color:#fff; font-size:16px; outline:none;
+    text-transform:uppercase; letter-spacing:1px; font-weight:600;
+  }
+  .field input:focus{ border-color:var(--neon); box-shadow:0 0 0 4px rgba(124,58,237,.18); }
+  .btn{
+    border:none; cursor:pointer; font-weight:700; font-size:15px;
+    background:linear-gradient(120deg,var(--azul),var(--roxo)); color:#fff;
+    border-radius:14px; padding:14px 20px; box-shadow:0 8px 22px rgba(124,58,237,.4);
+    transition:transform .1s ease;
+  }
+  .btn:active{ transform:scale(.96); }
+  .btn.full{ width:100%; margin-top:6px; }
+  .err{ color:#fb7185; font-size:13px; text-align:center; margin-top:12px; min-height:18px; font-weight:600; }
+
+  /* content modal */
+  .block{ margin-bottom:18px; }
+  .block-h{
+    display:flex; align-items:center; gap:8px; font-size:12px; letter-spacing:1.5px;
+    text-transform:uppercase; color:var(--neon2); font-weight:700; margin-bottom:10px;
+  }
+  .ex-list{ list-style:none; display:flex; flex-direction:column; gap:8px; }
+  .ex-list li{
+    background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.07);
+    border-left:3px solid var(--roxo); border-radius:12px; padding:11px 14px;
+    font-size:14.5px; color:var(--txt); line-height:1.4;
+  }
+  .habit{
+    background:linear-gradient(120deg,rgba(79,70,229,.18),rgba(124,58,237,.14));
+    border:1px solid rgba(167,139,250,.3); border-radius:14px; padding:14px 16px;
+    font-size:14.5px; line-height:1.5;
+  }
+  .frase{
+    text-align:center; font-style:italic; color:var(--neon); font-size:15.5px;
+    line-height:1.5; margin-top:20px; padding:0 6px;
+  }
+  .cta{
+    background:linear-gradient(135deg,var(--roxo),var(--azul));
+    border-radius:18px; padding:20px; text-align:center; margin-top:18px;
+  }
+  .cta h3{ font-size:19px; margin-bottom:8px; }
+  .cta p{ font-size:14px; opacity:.92; line-height:1.5; margin-bottom:14px; }
+  .cta a{
+    display:inline-block; background:#fff; color:var(--roxo2); font-weight:800;
+    text-decoration:none; padding:13px 26px; border-radius:99px; font-size:15px;
+  }
+
+  footer{ text-align:center; margin-top:50px; color:#46426e; font-size:11.5px; }
+  footer .reset{ color:#46426e; background:none; border:none; cursor:pointer; text-decoration:underline; font-size:11.5px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <span class="kicker">30 dias · de graça · comigo</span>
+    <h1>Ciclo Zero</h1>
+    <p class="sub">Seu <b>primeiro ciclo</b> comigo te acompanhando de perto.<br>
+    Todo dia eu solto a <b>palavra do dia</b> aqui no grupo. Você digita e destrava o treino e o hábito daquele dia.</p>
+    <div class="progress"><div class="bar" id="bar"></div></div>
+    <p class="progress-label"><b id="count">0</b> de 30 dias destravados</p>
+  </header>
+
+  <div class="trail" id="trail"></div>
+
+  <footer>
+    Ciclo Zero · Lucas Lima · Personal Trainer<br>
+    <button class="reset" id="reset">reiniciar meu progresso</button>
+  </footer>
+</div>
+
+<!-- modal de palavra -->
+<div class="overlay" id="lockOverlay">
+  <div class="modal">
+    <button class="x" onclick="closeAll()">&times;</button>
+    <div class="lock-emoji">🔒</div>
+    <p class="m-day" id="lockDay" style="text-align:center"></p>
+    <p class="lock-txt">Esse dia ainda tá trancado.<br>Digite a <b>palavra do dia</b> que o Lucas mandou no grupo.</p>
+    <div class="field">
+      <input type="text" id="wordInput" placeholder="palavra do dia" autocomplete="off" autocapitalize="characters">
+      <button class="btn" id="unlockBtn">Abrir</button>
+    </div>
+    <p class="err" id="err"></p>
+  </div>
+</div>
+
+<!-- modal de conteudo -->
+<div class="overlay" id="contentOverlay">
+  <div class="modal" id="contentModal"></div>
+</div>
+
+<script>
+// ====== CONTEUDO DOS 30 DIAS ======
+const DIAS = [
+ // SEMANA 1 - Sair da inercia
+ {d:1, s:1, sem:"Semana 1 · Sair da inércia", tit:"Marco Zero", pal:"COMECEI", tipo:"Treino corpo todo",
+  treino:["Agachamento livre · 3x10","Flexão de joelhos (ou na parede) · 3x8","Ponte de glúteo · 3x12","Prancha · 3x20s","Marcha no lugar · 3x30s"],
+  hab:"Anote seu peso, suas medidas e tire UMA foto de hoje. Esse é o seu ponto de partida. Beba 1 copo de água ao acordar.",
+  fr:"O dia mais difícil é o primeiro. E você já passou dele."},
+ {d:2, s:1, sem:"Semana 1 · Sair da inércia", tit:"Passos", pal:"PASSOS", tipo:"Movimento",
+  treino:["Caminhada 25 a 30 min, ritmo confortável","Mobilidade de quadril e tornozelo · 5 min"],
+  hab:"Meta de hoje: bater 6 mil passos. Estacione longe, desça um ponto antes, ande enquanto fala no telefone.",
+  fr:"Andar conta. Movimento é movimento."},
+ {d:3, s:1, sem:"Semana 1 · Sair da inércia", tit:"A base", pal:"BASE", tipo:"Inferior leve",
+  treino:["Agachamento na cadeira · 3x12","Afundo apoiado · 3x10 cada perna","Ponte de glúteo · 3x15","Elevação de panturrilha · 3x15","Abdução deitado · 3x12 cada"],
+  hab:"2 litros de água hoje. Deixe uma garrafa cheia sempre à vista.",
+  fr:"Glúteo forte protege a coluna. A gente sempre começa pela base."},
+ {d:4, s:1, sem:"Semana 1 · Sair da inércia", tit:"Água e ar", pal:"AGUA", tipo:"Movimento",
+  treino:["Caminhada 25 min","Alongamento de cadeia posterior · 5 min"],
+  hab:"Troque 1 bebida açucarada do dia por água. Só uma. É o começo.",
+  fr:"Pequena troca hoje, diferença enorme em 30 dias."},
+ {d:5, s:1, sem:"Semana 1 · Sair da inércia", tit:"Parte de cima", pal:"FORCA", tipo:"Superior e core",
+  treino:["Flexão inclinada (na mesa ou parede) · 3x10","Remada com elástico ou garrafa · 3x12","Desenvolvimento com garrafa · 3x12","Prancha · 3x25s","Abdominal canivete leve · 3x12"],
+  hab:"Coloque uma fonte de proteína no café da manhã (ovo, iogurte, queijo).",
+  fr:"Corpo todo trabalha. Nada fica pra trás."},
+ {d:6, s:1, sem:"Semana 1 · Sair da inércia", tit:"Pausa ativa", pal:"PAUSA", tipo:"Descanso",
+  treino:["Alongamento geral · 10 min","Respiração 4-7-8 · 5 ciclos"],
+  hab:"Durma 30 minutos mais cedo hoje.",
+  fr:"Descanso também é treino. É nele que o corpo muda."},
+ {d:7, s:1, sem:"Semana 1 · Sair da inércia", tit:"Primeira semana fechada", pal:"ORGULHO", tipo:"Movimento",
+  treino:["Caminhada longa · 35 a 40 min"],
+  hab:"Pare 2 minutos e anote: como você se sentiu nessa primeira semana?",
+  fr:"7 dias. Você provou que consegue. Bora pra próxima."},
+
+ // SEMANA 2 - Criar rotina
+ {d:8, s:2, sem:"Semana 2 · Criar rotina", tit:"Mais volume", pal:"ROTINA", tipo:"Treino corpo todo",
+  treino:["Agachamento livre · 4x12","Afundo · 3x12 cada","Flexão de joelhos · 3x10","Ponte de glúteo · 4x15","Prancha · 3x30s"],
+  hab:"Monte o prato: metade dele de vegetais/salada no almoço.",
+  fr:"Subimos o volume. Seu corpo já aguenta mais."},
+ {d:9, s:2, sem:"Semana 2 · Criar rotina", tit:"Intervalado leve", pal:"RITMO", tipo:"Movimento",
+  treino:["Caminhada com tiros: 1 min rápido / 2 min leve · repita 6x"],
+  hab:"Proteína no almoço E no jantar hoje.",
+  fr:"Acelera e respira. Seu coração agradece."},
+ {d:10, s:2, sem:"Semana 2 · Criar rotina", tit:"Glúteo em foco", pal:"SUBIU", tipo:"Inferior",
+  treino:["Agachamento sumô · 4x12","Afundo reverso · 3x12 cada","Ponte unilateral · 3x12 cada","Abdução em pé com elástico · 3x15","Panturrilha · 4x15"],
+  hab:"Troque o doce da tarde por 1 fruta. 2L de água.",
+  fr:"Quem treina perna queima mais o dia inteiro."},
+ {d:11, s:2, sem:"Semana 2 · Criar rotina", tit:"Núcleo forte", pal:"NUCLEO", tipo:"Core e mobilidade",
+  treino:["Prancha · 3x30s","Prancha lateral · 3x20s cada","Abdominal infra · 3x12","Bird-dog · 3x10 cada","Gato-camelo (mobilidade) · 3x10"],
+  hab:"10 minutos sem celular antes de dormir.",
+  fr:"Core forte é postura melhor e menos dor nas costas."},
+ {d:12, s:2, sem:"Semana 2 · Criar rotina", tit:"Costas e braço", pal:"SUOR", tipo:"Superior",
+  treino:["Flexão inclinada · 3x12","Remada com elástico · 4x12","Desenvolvimento com garrafa · 3x12","Rosca · 3x15","Tríceps no banco · 3x12"],
+  hab:"De novo: proteína no café. Tá virando hábito.",
+  fr:"Braço e costas firmes mudam a sua postura."},
+ {d:13, s:2, sem:"Semana 2 · Criar rotina", tit:"Cardio leve", pal:"META", tipo:"Movimento",
+  treino:["Caminhada 30 min OU dança / atividade que você gosta · 20 min"],
+  hab:"Durma de 7 a 8 horas hoje. Programe o despertador de dormir.",
+  fr:"Mexer pode ser leve. O importante é não parar."},
+ {d:14, s:2, sem:"Semana 2 · Criar rotina", tit:"Metade do caminho", pal:"FOGO", tipo:"Movimento",
+  treino:["Caminhada longa · 40 min"],
+  hab:"Revise suas medidas. Sem cobrança, só registro do progresso.",
+  fr:"Metade do caminho. Olha o quanto você já mudou."},
+
+ // SEMANA 3 - Apertar o passo
+ {d:15, s:3, sem:"Semana 3 · Apertar o passo", tit:"Circuito metabólico", pal:"SONO", tipo:"Circuito",
+  treino:["4 rodadas, 1 min de descanso entre elas:","Agachamento · 15","Flexão · 10","Polichinelo · 30s","Ponte de glúteo · 15","Prancha · 30s"],
+  hab:"Prioridade da semana: sono. Deite no mesmo horário hoje.",
+  fr:"Circuito queima por horas depois. Vale cada gota de suor."},
+ {d:16, s:3, sem:"Semana 3 · Apertar o passo", tit:"Tiros", pal:"PESO", tipo:"Movimento",
+  treino:["Caminhada com tiros: 1 min forte / 1 min leve · repita 8x"],
+  hab:"Tela longe 30 min antes de dormir. Sono é treino invisível.",
+  fr:"Dormir bem emagrece. Cuida disso essa semana."},
+ {d:17, s:3, sem:"Semana 3 · Apertar o passo", tit:"Perna pesada", pal:"LIMITE", tipo:"Inferior",
+  treino:["Agachamento · 4x15","Afundo búlgaro apoiado · 3x10 cada","Ponte com pausa de 2s · 4x12","Abdução · 3x20 cada","Panturrilha · 4x20"],
+  hab:"Zero açúcar líquido hoje (refri, suco de caixinha). 2L de água.",
+  fr:"As pernas pedem pra parar. É aí que o resultado começa."},
+ {d:18, s:3, sem:"Semana 3 · Apertar o passo", tit:"Core e fôlego", pal:"CORE", tipo:"Core e cardio",
+  treino:["Mountain climber · 3x30s","Prancha · 3x40s","Abdominal bicicleta · 3x20","Elevação de pernas · 3x12","Polichinelo · 3x40s"],
+  hab:"8 mil passos hoje.",
+  fr:"Barriga não some só com abdominal, some com constância. Mas o core ajuda."},
+ {d:19, s:3, sem:"Semana 3 · Apertar o passo", tit:"Circuito de cima", pal:"DOCE", tipo:"Superior em circuito",
+  treino:["3 rodadas, sem parar:","Flexão · 12","Remada · 15","Desenvolvimento · 12","Rosca · 15","Prancha · 30s"],
+  hab:"Proteína em todas as refeições de hoje.",
+  fr:"Parte de cima ganhando forma. Continua."},
+ {d:20, s:3, sem:"Semana 3 · Apertar o passo", tit:"Recupera", pal:"CALMA", tipo:"Descanso ativo",
+  treino:["Alongamento + mobilidade · 15 min","Respiração e relaxamento · 5 min"],
+  hab:"Durma cedo e hidrate bem. Última semana vem forte.",
+  fr:"Recupera pra explodir na reta final."},
+ {d:21, s:3, sem:"Semana 3 · Apertar o passo", tit:"Desafio da semana", pal:"DESAFIO", tipo:"AMRAP",
+  treino:["AMRAP 12 min (máximo de rodadas no tempo):","Agachamento · 10","Flexão · 8","Afundo · 6 cada","Ponte · 12","Anote quantas rodadas você fez."],
+  hab:"Revise a semana 3. Você cortou açúcar e dormiu melhor?",
+  fr:"21 dias. Dizem que é o que cria um hábito. Você criou."},
+
+ // SEMANA 4 - Virar estilo de vida
+ {d:22, s:4, sem:"Semana 4 · Virar estilo de vida", tit:"Modo pico", pal:"PICO", tipo:"Circuito",
+  treino:["5 rodadas, 1 min de descanso:","Agachamento · 15","Flexão · 10","Afundo · 10 cada","Ponte · 15","Prancha · 40s"],
+  hab:"De manhã, planeje as refeições do dia. Antecipar evita furada.",
+  fr:"Última semana. Modo pico ligado."},
+ {d:23, s:4, sem:"Semana 4 · Virar estilo de vida", tit:"Consolidar", pal:"AGUA2", tipo:"Movimento",
+  treino:["Caminhada intervalada · 30 min"],
+  hab:"Hoje o dia inteiro sem açúcar líquido. Consolida o que você treinou na semana 3.",
+  fr:"O que era esforço já tá virando rotina."},
+ {d:24, s:4, sem:"Semana 4 · Virar estilo de vida", tit:"Base blindada", pal:"GLUTEOS", tipo:"Inferior pico",
+  treino:["Agachamento · 4x20","Afundo búlgaro · 4x10 cada","Ponte unilateral · 4x12 cada","Abdução com elástico · 4x20","Panturrilha · 4x25"],
+  hab:"2,5 litros de água hoje.",
+  fr:"Glúteo e perna no talo. Sua base tá blindada."},
+ {d:25, s:4, sem:"Semana 4 · Virar estilo de vida", tit:"Fôlego novo", pal:"ESCUDO", tipo:"Core e cardio",
+  treino:["Burpee leve · 3x10","Prancha · 3x45s","Mountain climber · 3x40s","Abdominal completo · 3x15","Polichinelo · 3x45s"],
+  hab:"9 mil passos hoje.",
+  fr:"Seu fôlego tá melhor que no dia 1. Sentiu?"},
+ {d:26, s:4, sem:"Semana 4 · Virar estilo de vida", tit:"Postura ereta", pal:"TOPO", tipo:"Superior pico",
+  treino:["Flexão · 4x12","Remada · 4x15","Desenvolvimento · 4x12","Rosca · 3x20","Tríceps · 3x15"],
+  hab:"Proteína + vegetais em pelo menos 2 refeições.",
+  fr:"Postura mais ereta, corpo mais firme."},
+ {d:27, s:4, sem:"Semana 4 · Virar estilo de vida", tit:"Planejar o depois", pal:"PLANO", tipo:"Descanso",
+  treino:["Alongamento · 15 min","Escreva: como eu quero seguir depois do dia 30?"],
+  hab:"Defina 1 meta concreta pros próximos 30 dias.",
+  fr:"Isso aqui é o começo, não o fim."},
+ {d:28, s:4, sem:"Semana 4 · Virar estilo de vida", tit:"Circuito final", pal:"RETA", tipo:"Circuito",
+  treino:["4 rodadas:","Agachamento · 20","Flexão · 12","Afundo · 12 cada","Ponte · 20","Prancha · 45s"],
+  hab:"Hidrate e durma bem. Amanhã é leve de propósito.",
+  fr:"Penúltimo esforço grande. Você caprichou."},
+ {d:29, s:4, sem:"Semana 4 · Virar estilo de vida", tit:"Preparar o teste", pal:"QUASE", tipo:"Movimento",
+  treino:["Caminhada leve · 25 min","Mobilidade · 5 min"],
+  hab:"Descanse, coma direito e durma bem. Amanhã você se testa.",
+  fr:"Recupera. Amanhã você vê o quanto evoluiu."},
+ {d:30, s:4, sem:"Semana 4 · Virar estilo de vida", tit:"Reteste e encerramento", pal:"CICLO", tipo:"O grande dia", cta:true,
+  treino:["Refaça EXATAMENTE o treino do Dia 1:","Agachamento livre · 3x10","Flexão de joelhos · 3x8","Ponte de glúteo · 3x12","Prancha · 3x20s","Marcha no lugar · 3x30s","Compare com o dia 1: ficou mais fácil?","Tire a foto do depois. Compare medidas e peso."],
+  hab:"Comemore. Você completou o Ciclo Zero inteiro.",
+  fr:"Você fechou 30 dias seguidos. A maioria não chega nem ao dia 5."}
+];
+
+// ====== ESTADO ======
+const KEY = "cicloZero_unlocked";
+let unlocked = JSON.parse(localStorage.getItem(KEY) || "[]");
+let pendingDay = null;
+
+const norm = s => s.toUpperCase().replace(/[ÁÀÂÃÄ]/g,"A").replace(/[ÉÊÈ]/g,"E")
+  .replace(/[ÍÎÌ]/g,"I").replace(/[ÓÔÕÒ]/g,"O").replace(/[ÚÛÙ]/g,"U").replace(/Ç/g,"C")
+  .replace(/[^A-Z0-9]/g,"").trim();
+
+// ====== RENDER DA TRILHA ======
+const trail = document.getElementById('trail');
+const SPACING = 116;       // distancia vertical entre nos
+const TOP = 70;            // margem de topo
+const FLAG_H = 46;         // altura reservada pra bandeira de semana
+let layout = [];           // {x,y,dia} por no
+
+function buildLayout(){
+  layout = [];
+  const W = trail.clientWidth || 480;
+  const cx = W/2;
+  const amp = Math.min(W*0.30, 150); // amplitude da serpente
+  let y = TOP;
+  let lastWeek = 0;
+  let flags = [];
+  DIAS.forEach((dia,i)=>{
+    if(dia.s !== lastWeek){ // nova semana: reserva espaco pra bandeira
+      flags.push({y:y - 30, sem:dia.s});
+      y += FLAG_H;
+      lastWeek = dia.s;
+    }
+    const x = cx + Math.sin(i*0.7) * amp;
+    layout.push({x, y, i});
+    y += SPACING;
+  });
+  return {height:y + 40, flags};
+}
+
+function render(){
+  const {height, flags} = buildLayout();
+  trail.style.height = height + "px";
+  trail.innerHTML = "";
+
+  // svg da linha conectora
+  const svgNS = "http://www.w3.org/2000/svg";
+  const svg = document.createElementNS(svgNS,"svg");
+  svg.setAttribute("viewBox", `0 0 ${trail.clientWidth} ${height}`);
+  let dPath = "";
+  layout.forEach((p,idx)=>{ dPath += (idx===0?`M ${p.x} ${p.y}`:` L ${p.x} ${p.y}`); });
+  const path = document.createElementNS(svgNS,"path");
+  path.setAttribute("d", dPath);
+  path.setAttribute("fill","none");
+  path.setAttribute("stroke","rgba(124,58,237,.30)");
+  path.setAttribute("stroke-width","5");
+  path.setAttribute("stroke-linecap","round");
+  path.setAttribute("stroke-dasharray","2 14");
+  svg.appendChild(path);
+  trail.appendChild(svg);
+
+  // bandeiras de semana
+  const semNomes = {1:"Semana 1",2:"Semana 2",3:"Semana 3",4:"Semana 4"};
+  flags.forEach(f=>{
+    const el = document.createElement("div");
+    el.className = "week-flag";
+    el.style.top = f.y + "px";
+    el.textContent = semNomes[f.sem];
+    trail.appendChild(el);
+  });
+
+  // proximo dia a abrir = primeiro nao desbloqueado
+  let nextDay = null;
+  for(const dia of DIAS){ if(!unlocked.includes(dia.d)){ nextDay = dia.d; break; } }
+
+  // nos
+  layout.forEach(p=>{
+    const dia = DIAS[p.i];
+    const isOpen = unlocked.includes(dia.d);
+    const isNext = dia.d === nextDay;
+    const node = document.createElement("div");
+    node.className = "node " + (isOpen?"open":(isNext?"next":"locked"));
+    node.style.left = p.x + "px";
+    node.style.top = p.y + "px";
+    const inner = isOpen
+      ? `<span class="num">${dia.d}</span><span class="check">✓</span>`
+      : `<span class="ic">${isNext?"⭑":"🔒"}</span>`;
+    node.innerHTML = `<div class="disc">${inner}</div><span class="day-tag">Dia ${dia.d}</span>`;
+    node.onclick = ()=> onNodeClick(dia, isOpen);
+    trail.appendChild(node);
+  });
+
+  // progresso
+  const n = unlocked.length;
+  document.getElementById('count').textContent = n;
+  document.getElementById('bar').style.width = (n/30*100) + "%";
+}
+
+function onNodeClick(dia, isOpen){
+  if(isOpen){ showContent(dia); }
+  else { openLock(dia); }
+}
+
+// ====== MODAL PALAVRA ======
+function openLock(dia){
+  pendingDay = dia;
+  document.getElementById('lockDay').textContent = "Dia " + dia.d;
+  document.getElementById('wordInput').value = "";
+  document.getElementById('err').textContent = "";
+  document.getElementById('lockOverlay').classList.add('show');
+  setTimeout(()=>document.getElementById('wordInput').focus(), 100);
+}
+function tryUnlock(){
+  if(!pendingDay) return;
+  const val = norm(document.getElementById('wordInput').value);
+  if(!val){ return; }
+  if(val === norm(pendingDay.pal)){
+    if(!unlocked.includes(pendingDay.d)){
+      unlocked.push(pendingDay.d);
+      localStorage.setItem(KEY, JSON.stringify(unlocked));
+      if(window.fbq) fbq('trackCustom','DiaDestravado',{dia:pendingDay.d});
+    }
+    const dia = pendingDay;
+    closeAll();
+    render();
+    setTimeout(()=>showContent(dia), 200);
+  } else {
+    document.getElementById('err').textContent = "Palavra errada. Confere no grupo o que o Lucas mandou hoje.";
+    document.getElementById('wordInput').focus();
+  }
+}
+document.getElementById('unlockBtn').onclick = tryUnlock;
+document.getElementById('wordInput').addEventListener('keydown', e=>{ if(e.key==='Enter') tryUnlock(); });
+
+// ====== MODAL CONTEUDO ======
+function showContent(dia){
+  const m = document.getElementById('contentModal');
+  const exItems = dia.treino.map(t=>`<li>${t}</li>`).join("");
+  const ctaBlock = dia.cta ? `
+    <div class="cta">
+      <h3>Terminou o Ciclo Zero 🏆</h3>
+      <p>Esse foi só o aquecimento. Quer continuar evoluindo comigo te acompanhando de perto, com treino e dieta no seu nome? Tenho uma condição especial pra quem terminou o Ciclo Zero.</p>
+      <a href="https://www.instagram.com/personaltrainerlucaslima" target="_blank" rel="noopener">Quero continuar no direct</a>
+    </div>` : "";
+  m.innerHTML = `
+    <button class="x" onclick="closeAll()">&times;</button>
+    <p class="m-day">Dia ${dia.d} · ${dia.tipo}</p>
+    <h2 class="m-title">${dia.tit}</h2>
+    <p class="m-week">${dia.sem}</p>
+    <div class="block">
+      <div class="block-h">🏋️ Treino de hoje</div>
+      <ul class="ex-list">${exItems}</ul>
+    </div>
+    <div class="block">
+      <div class="block-h">🎯 Hábito do dia</div>
+      <div class="habit">${dia.hab}</div>
+    </div>
+    <p class="frase">"${dia.fr}"</p>
+    ${ctaBlock}
+  `;
+  document.getElementById('contentOverlay').classList.add('show');
+}
+
+function closeAll(){
+  document.getElementById('lockOverlay').classList.remove('show');
+  document.getElementById('contentOverlay').classList.remove('show');
+  pendingDay = null;
+}
+[document.getElementById('lockOverlay'),document.getElementById('contentOverlay')].forEach(ov=>{
+  ov.addEventListener('click', e=>{ if(e.target===ov) closeAll(); });
+});
+
+document.getElementById('reset').onclick = ()=>{
+  if(confirm("Isso apaga o seu progresso e tranca todos os dias de novo. Tem certeza?")){
+    unlocked = []; localStorage.removeItem(KEY); render();
+  }
+};
+
+window.addEventListener('resize', render);
+render();
+</script>
+</body>
+</html>

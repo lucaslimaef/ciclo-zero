@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cola do Treinador · Ciclo Zero</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  body{
+    font-family:'Segoe UI',system-ui,sans-serif; background:#0e1320; color:#e8ecf6;
+    background:linear-gradient(180deg,#10182b,#0b0f1a); min-height:100vh; padding:24px 16px 60px;
+  }
+  .wrap{max-width:560px;margin:0 auto;}
+  .top{text-align:center;margin-bottom:8px;}
+  .badge{display:inline-block;font-size:10.5px;letter-spacing:2px;text-transform:uppercase;
+    color:#fca5a5;border:1px solid rgba(252,165,165,.4);border-radius:99px;padding:4px 12px;background:rgba(220,38,38,.08);}
+  h1{font-size:30px;font-weight:800;margin:12px 0 4px;letter-spacing:-.5px;}
+  .note{font-size:13.5px;color:#94a0bd;line-height:1.5;max-width:440px;margin:0 auto 22px;}
+  .note b{color:#cdd6ea;}
+
+  .week{margin-bottom:18px;}
+  .week-title{font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:#818cf8;
+    font-weight:700;margin:18px 0 10px 4px;}
+  .row{
+    display:flex;align-items:center;gap:14px;background:rgba(255,255,255,.035);
+    border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:12px 14px;margin-bottom:8px;cursor:pointer;
+    transition:background .15s;
+  }
+  .row:active{background:rgba(124,58,237,.18);}
+  .daynum{
+    flex-shrink:0;width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;
+    font-weight:800;font-size:15px;background:linear-gradient(160deg,#5b21b6,#4338ca);color:#fff;
+  }
+  .info{flex:1;min-width:0;}
+  .info .ttl{font-size:13px;color:#9aa6c4;line-height:1.2;}
+  .info .word{font-size:19px;font-weight:800;letter-spacing:1px;color:#fff;margin-top:1px;}
+  .copy{flex-shrink:0;font-size:11px;color:#6b7593;}
+  .row.copied .copy{color:#34d399;font-weight:700;}
+
+  .foot{text-align:center;margin-top:28px;font-size:12px;color:#566080;}
+  .tip{background:rgba(129,140,248,.1);border:1px solid rgba(129,140,248,.3);border-radius:14px;
+    padding:14px 16px;font-size:13.5px;line-height:1.55;color:#c3cbe4;margin-bottom:8px;}
+  .tip b{color:#fff;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <span class="badge">🔒 só pra você, Lucas</span>
+    <h1>Cola do Treinador</h1>
+    <p class="note">A <b>palavra de cada dia</b> do Ciclo Zero. No dia certo, é só mandar a palavra no grupo que o pessoal destrava o treino. <b>Toque na linha pra copiar</b> a palavra.</p>
+  </div>
+
+  <div class="tip">💡 <b>Rotina:</b> de manhã, copie a palavra do dia e cole no grupo com uma frase de chamada. Ex: <i>"Bom dia, time! Palavra de hoje: <b>PASSOS</b>. Destrava lá no Ciclo Zero 👟"</i></div>
+
+  <div id="list"></div>
+
+  <p class="foot">Ciclo Zero · Lucas Lima · não compartilhe esta página</p>
+</div>
+
+<script>
+const DADOS = [
+ {s:1, nome:"Semana 1 · Sair da inércia", dias:[
+   [1,"Marco Zero (corpo todo)","COMECEI"],[2,"Passos (caminhada)","PASSOS"],[3,"A base (inferior)","BASE"],
+   [4,"Água e ar (caminhada)","AGUA"],[5,"Parte de cima (superior)","FORCA"],[6,"Pausa ativa (descanso)","PAUSA"],
+   [7,"Fecha a semana (caminhada)","ORGULHO"]]},
+ {s:2, nome:"Semana 2 · Criar rotina", dias:[
+   [8,"Mais volume (corpo todo)","ROTINA"],[9,"Intervalado leve","RITMO"],[10,"Glúteo em foco","SUBIU"],
+   [11,"Núcleo forte (core)","NUCLEO"],[12,"Costas e braço","SUOR"],[13,"Cardio leve","META"],
+   [14,"Metade do caminho","FOGO"]]},
+ {s:3, nome:"Semana 3 · Apertar o passo", dias:[
+   [15,"Circuito metabólico","SONO"],[16,"Tiros (caminhada)","PESO"],[17,"Perna pesada","LIMITE"],
+   [18,"Core e fôlego","CORE"],[19,"Circuito de cima","DOCE"],[20,"Recupera (descanso)","CALMA"],
+   [21,"Desafio da semana","DESAFIO"]]},
+ {s:4, nome:"Semana 4 · Virar estilo de vida", dias:[
+   [22,"Modo pico (circuito)","PICO"],[23,"Consolidar (caminhada)","AGUA2"],[24,"Base blindada","GLUTEOS"],
+   [25,"Fôlego novo","ESCUDO"],[26,"Postura ereta","TOPO"],[27,"Planejar o depois","PLANO"],
+   [28,"Circuito final","RETA"],[29,"Preparar o teste","QUASE"],[30,"RETESTE + convite consultoria","CICLO"]]}
+];
+
+const list = document.getElementById('list');
+DADOS.forEach(w=>{
+  const sec = document.createElement('div');
+  sec.className='week';
+  sec.innerHTML = `<div class="week-title">${w.nome}</div>`;
+  w.dias.forEach(([d,ttl,word])=>{
+    const row = document.createElement('div');
+    row.className='row';
+    row.innerHTML = `<div class="daynum">${d}</div>
+      <div class="info"><div class="ttl">Dia ${d} · ${ttl}</div><div class="word">${word}</div></div>
+      <div class="copy">copiar</div>`;
+    row.onclick = ()=>{
+      navigator.clipboard?.writeText(word);
+      row.classList.add('copied');
+      row.querySelector('.copy').textContent='copiado ✓';
+      setTimeout(()=>{ row.classList.remove('copied'); row.querySelector('.copy').textContent='copiar'; },1500);
+    };
+    sec.appendChild(row);
+  });
+  list.appendChild(sec);
+});
+</script>
+</body>
+</html>
