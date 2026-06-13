@@ -19,11 +19,17 @@ src="https://www.facebook.com/tr?id=264800457918824&ev=PageView&noscript=1"/></n
 <style>
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   :root{
-    --bg:#0a0a16; --bg2:#11102a;
-    --roxo:#7c3aed; --roxo2:#5b21b6; --azul:#4f46e5;
+    --bg:#0a0a16;
+    --roxo:#7c3aed; --azul:#4f46e5;
     --neon:#a78bfa; --neon2:#818cf8;
     --txt:#ece9ff; --txt2:#9b96c7;
-    --lock:#1c1b33; --lock-b:#2c2a4d;
+    --lock:#1c1b33;
+    --gold:#fbbf24; --gold2:#f59e0b;
+    /* gradiente por semana (progressao visual, sempre roxo azulado) */
+    --w1:linear-gradient(160deg,#4f46e5,#7c3aed);
+    --w2:linear-gradient(160deg,#6d28d9,#4f46e5);
+    --w3:linear-gradient(160deg,#8b5cf6,#6366f1);
+    --w4:linear-gradient(160deg,#a855f7,#7c3aed);
   }
   html,body{ background:var(--bg); color:var(--txt); font-family:'Segoe UI',system-ui,sans-serif; }
   body{
@@ -35,82 +41,110 @@ src="https://www.facebook.com/tr?id=264800457918824&ev=PageView&noscript=1"/></n
   }
   .wrap{ max-width:520px; margin:0 auto; padding:0 18px 80px; }
 
-  header{ text-align:center; padding:34px 0 12px; }
+  header{ text-align:center; padding:30px 0 8px; }
   .kicker{
-    display:inline-block; font-size:11px; letter-spacing:3px; text-transform:uppercase;
+    display:inline-block; font-size:11px; letter-spacing:2.5px; text-transform:uppercase;
     color:var(--neon); border:1px solid rgba(167,139,250,.4); border-radius:99px;
     padding:5px 14px; margin-bottom:14px; background:rgba(124,58,237,.1);
   }
   h1{
-    font-size:46px; line-height:1; font-weight:800; letter-spacing:-1px;
+    font-size:48px; line-height:1; font-weight:800; letter-spacing:-1px;
     background:linear-gradient(120deg,#fff, var(--neon) 60%, var(--neon2));
     -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
   }
   .sub{ color:var(--txt2); font-size:14.5px; margin-top:12px; line-height:1.5; }
   .sub b{ color:var(--txt); font-weight:600; }
 
+  /* botao hero */
+  .hero-btn{
+    display:flex; align-items:center; justify-content:center; gap:9px;
+    width:100%; max-width:360px; margin:22px auto 6px;
+    border:none; cursor:pointer; font-family:inherit; font-weight:800; font-size:17px;
+    color:#fff; padding:16px 20px; border-radius:18px;
+    background:linear-gradient(120deg,var(--azul),var(--roxo),var(--neon));
+    box-shadow:0 12px 30px rgba(124,58,237,.5); transition:transform .12s ease, box-shadow .12s;
+  }
+  .hero-btn:active{ transform:scale(.97); box-shadow:0 6px 18px rgba(124,58,237,.5); }
+  .hero-btn .em{ font-size:20px; }
+
+  /* progresso */
   .progress{
-    margin:26px auto 6px; max-width:340px;
-    background:rgba(255,255,255,.06); border-radius:99px; height:12px; overflow:hidden;
-    border:1px solid rgba(255,255,255,.08);
+    margin:18px auto 8px; max-width:360px;
+    background:rgba(255,255,255,.06); border-radius:99px; height:14px; overflow:hidden;
+    border:1px solid rgba(255,255,255,.08); position:relative;
   }
   .progress .bar{
     height:100%; width:0%; border-radius:99px;
     background:linear-gradient(90deg,var(--azul),var(--roxo),var(--neon));
     box-shadow:0 0 16px rgba(124,58,237,.7); transition:width .6s cubic-bezier(.2,.8,.2,1);
   }
-  .progress-label{ text-align:center; font-size:12.5px; color:var(--txt2); margin-bottom:10px; }
-  .progress-label b{ color:var(--neon); font-weight:700; }
+  .stats{ display:flex; justify-content:center; gap:18px; margin-bottom:6px; }
+  .chip{
+    font-size:12.5px; color:var(--txt2); display:flex; align-items:center; gap:5px;
+    background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08);
+    padding:5px 12px; border-radius:99px;
+  }
+  .chip b{ color:var(--neon); font-weight:700; font-size:14px; }
+  .chip.done b{ color:var(--gold); }
 
   /* trilha */
-  .trail{ position:relative; margin-top:18px; }
+  .trail{ position:relative; margin-top:14px; }
   .trail svg{ position:absolute; inset:0; width:100%; height:100%; z-index:0; pointer-events:none; }
   .node{
-    position:absolute; width:78px; height:78px; transform:translate(-50%,-50%);
+    position:absolute; width:84px; height:84px; transform:translate(-50%,-50%);
     z-index:2; cursor:pointer; display:flex; align-items:center; justify-content:center;
     transition:transform .15s ease;
   }
-  .node:active{ transform:translate(-50%,-50%) scale(.93); }
+  .node:active{ transform:translate(-50%,-50%) scale(.92); }
   .disc{
-    width:64px; height:64px; border-radius:50%;
-    display:flex; align-items:center; justify-content:center; flex-direction:column;
-    font-weight:800; position:relative;
+    width:66px; height:66px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-weight:800; position:relative; font-size:27px;
   }
-  /* bloqueado */
-  .node.locked .disc{
-    background:var(--lock); border:2px solid #2c2a4d; color:#564f86;
-  }
-  .node.locked .disc .ic{ font-size:22px; opacity:.8; }
-  /* desbloqueado */
-  .node.open .disc{
-    background:linear-gradient(160deg,var(--roxo),var(--azul));
-    border:2px solid var(--neon); color:#fff;
-    box-shadow:0 6px 22px rgba(124,58,237,.55), 0 0 0 6px rgba(124,58,237,.12);
-  }
-  .node.open .disc .num{ font-size:22px; line-height:1; }
-  .node.open .disc .check{ font-size:11px; opacity:.85; margin-top:1px; }
-  /* proximo a abrir (pulsa) */
+  .node.locked .disc{ background:var(--lock); border:2px solid #2c2a4d; color:#564f86; }
+  .node.locked .disc .ic{ font-size:23px; opacity:.85; }
+
   .node.next .disc{
     background:var(--lock); border:2px solid var(--neon); color:var(--neon);
-    animation:pulse 1.8s infinite;
+    animation:pulse 1.7s infinite;
   }
-  .node.next .disc .ic{ font-size:22px; }
+  .node.next .disc .ic{ font-size:26px; }
+
+  .node.open .disc{
+    border:2px solid var(--neon); color:#fff;
+    box-shadow:0 6px 22px rgba(124,58,237,.5), 0 0 0 6px rgba(124,58,237,.12);
+  }
+  .node.open.w1 .disc{ background:var(--w1); }
+  .node.open.w2 .disc{ background:var(--w2); }
+  .node.open.w3 .disc{ background:var(--w3); }
+  .node.open.w4 .disc{ background:var(--w4); }
+
+  .node.done .disc{
+    background:linear-gradient(160deg,var(--gold),var(--gold2)); border:2px solid #fde68a;
+    color:#5b3a00; box-shadow:0 6px 24px rgba(245,158,11,.55), 0 0 0 6px rgba(245,158,11,.15);
+  }
+
   @keyframes pulse{
     0%,100%{ box-shadow:0 0 0 0 rgba(167,139,250,.45);}
-    50%{ box-shadow:0 0 0 12px rgba(167,139,250,0);}
+    50%{ box-shadow:0 0 0 13px rgba(167,139,250,0);}
   }
   .node .day-tag{
-    position:absolute; bottom:-16px; left:50%; transform:translateX(-50%);
-    font-size:10.5px; color:var(--txt2); white-space:nowrap; font-weight:600; letter-spacing:.5px;
+    position:absolute; bottom:-15px; left:50%; transform:translateX(-50%);
+    font-size:10.5px; color:var(--txt2); white-space:nowrap; font-weight:700; letter-spacing:.5px;
   }
-  .node.open .day-tag{ color:var(--neon); }
+  .node.open .day-tag, .node.next .day-tag{ color:var(--neon); }
+  .node.done .day-tag{ color:var(--gold); }
 
   .week-flag{
     position:absolute; z-index:1; left:50%; transform:translateX(-50%);
-    font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--neon2);
-    background:rgba(17,16,42,.85); border:1px solid rgba(129,140,248,.35);
-    padding:5px 14px; border-radius:99px; white-space:nowrap;
+    font-size:11.5px; letter-spacing:1.5px; text-transform:uppercase; font-weight:700;
+    color:#fff; padding:6px 16px; border-radius:99px; white-space:nowrap;
+    display:flex; align-items:center; gap:7px;
   }
+  .week-flag.f1{ background:rgba(79,70,229,.9); }
+  .week-flag.f2{ background:rgba(109,40,217,.9); }
+  .week-flag.f3{ background:rgba(139,92,246,.9); }
+  .week-flag.f4{ background:rgba(168,85,247,.9); }
 
   /* modais */
   .overlay{
@@ -120,26 +154,24 @@ src="https://www.facebook.com/tr?id=264800457918824&ev=PageView&noscript=1"/></n
   .overlay.show{ display:flex; }
   .modal{
     background:linear-gradient(180deg,#16142e,#0f0e22); width:100%; max-width:430px;
-    border:1px solid rgba(167,139,250,.3); border-radius:24px; padding:26px 22px;
-    box-shadow:0 30px 80px rgba(0,0,0,.6); max-height:88vh; overflow-y:auto;
+    border:1px solid rgba(167,139,250,.3); border-radius:24px; padding:24px 22px;
+    box-shadow:0 30px 80px rgba(0,0,0,.6); max-height:90vh; overflow-y:auto;
     animation:pop .25s cubic-bezier(.2,.9,.3,1.2);
   }
   @keyframes pop{ from{ transform:scale(.9); opacity:0;} to{ transform:scale(1); opacity:1;} }
   .modal .x{
-    float:right; font-size:24px; color:var(--txt2); cursor:pointer; line-height:1;
-    border:none; background:none; padding:2px 6px;
+    float:right; font-size:26px; color:var(--txt2); cursor:pointer; line-height:1;
+    border:none; background:none; padding:0 4px;
   }
-  .m-day{ font-size:12px; letter-spacing:2px; text-transform:uppercase; color:var(--neon); font-weight:700; }
-  .m-title{ font-size:25px; font-weight:800; margin:6px 0 4px; letter-spacing:-.5px; }
+  .m-emoji{ font-size:40px; line-height:1; }
+  .m-day{ font-size:12px; letter-spacing:2px; text-transform:uppercase; color:var(--neon); font-weight:700; margin-top:6px; }
+  .m-title{ font-size:26px; font-weight:800; margin:5px 0 4px; letter-spacing:-.5px; }
   .m-week{ font-size:12.5px; color:var(--txt2); margin-bottom:18px; }
 
-  /* lock modal */
-  .lock-emoji{ font-size:44px; text-align:center; margin:4px 0 10px; }
+  .lock-emoji{ font-size:46px; text-align:center; margin:6px 0 10px; }
   .lock-txt{ text-align:center; color:var(--txt2); font-size:14px; line-height:1.5; margin-bottom:18px; }
   .lock-txt b{ color:var(--txt); }
-  .field{
-    display:flex; gap:8px; margin-top:6px;
-  }
+  .field{ display:flex; gap:8px; margin-top:6px; }
   .field input{
     flex:1; background:rgba(255,255,255,.06); border:1.5px solid rgba(167,139,250,.3);
     border-radius:14px; padding:14px 16px; color:#fff; font-size:16px; outline:none;
@@ -147,17 +179,19 @@ src="https://www.facebook.com/tr?id=264800457918824&ev=PageView&noscript=1"/></n
   }
   .field input:focus{ border-color:var(--neon); box-shadow:0 0 0 4px rgba(124,58,237,.18); }
   .btn{
-    border:none; cursor:pointer; font-weight:700; font-size:15px;
+    border:none; cursor:pointer; font-family:inherit; font-weight:700; font-size:15px;
     background:linear-gradient(120deg,var(--azul),var(--roxo)); color:#fff;
     border-radius:14px; padding:14px 20px; box-shadow:0 8px 22px rgba(124,58,237,.4);
-    transition:transform .1s ease;
+    transition:transform .1s ease; display:flex; align-items:center; justify-content:center; gap:8px;
   }
   .btn:active{ transform:scale(.96); }
-  .btn.full{ width:100%; margin-top:6px; }
+  .btn.full{ width:100%; }
+  .btn.gold{ background:linear-gradient(120deg,var(--gold),var(--gold2)); color:#5b3a00; box-shadow:0 8px 22px rgba(245,158,11,.4); }
+  .btn.ghost{ background:transparent; border:1.5px solid rgba(167,139,250,.35); color:var(--neon); box-shadow:none; }
+  .btn.done-state{ background:rgba(52,211,153,.16); border:1.5px solid rgba(52,211,153,.5); color:#6ee7b7; box-shadow:none; }
   .err{ color:#fb7185; font-size:13px; text-align:center; margin-top:12px; min-height:18px; font-weight:600; }
 
-  /* content modal */
-  .block{ margin-bottom:18px; }
+  .block{ margin-bottom:16px; }
   .block-h{
     display:flex; align-items:center; gap:8px; font-size:12px; letter-spacing:1.5px;
     text-transform:uppercase; color:var(--neon2); font-weight:700; margin-bottom:10px;
@@ -175,32 +209,50 @@ src="https://www.facebook.com/tr?id=264800457918824&ev=PageView&noscript=1"/></n
   }
   .frase{
     text-align:center; font-style:italic; color:var(--neon); font-size:15.5px;
-    line-height:1.5; margin-top:20px; padding:0 6px;
+    line-height:1.5; margin:18px 0; padding:0 6px;
   }
+  .m-actions{ display:flex; flex-direction:column; gap:10px; margin-top:14px; }
+  .m-actions .row2{ display:flex; gap:10px; }
+  .m-actions .row2 .btn{ flex:1; }
+
   .cta{
     background:linear-gradient(135deg,var(--roxo),var(--azul));
-    border-radius:18px; padding:20px; text-align:center; margin-top:18px;
+    border-radius:18px; padding:20px; text-align:center; margin-top:16px;
   }
   .cta h3{ font-size:19px; margin-bottom:8px; }
   .cta p{ font-size:14px; opacity:.92; line-height:1.5; margin-bottom:14px; }
   .cta a{
-    display:inline-block; background:#fff; color:var(--roxo2); font-weight:800;
+    display:inline-flex; align-items:center; gap:8px; background:#fff; color:#5b21b6; font-weight:800;
     text-decoration:none; padding:13px 26px; border-radius:99px; font-size:15px;
   }
 
-  footer{ text-align:center; margin-top:50px; color:#46426e; font-size:11.5px; }
+  /* confete de emoji */
+  #confetti{ position:fixed; inset:0; pointer-events:none; z-index:100; overflow:hidden; }
+  .conf{ position:absolute; top:-40px; font-size:26px; animation:fall linear forwards; }
+  @keyframes fall{
+    0%{ transform:translateY(-40px) rotate(0deg); opacity:1; }
+    100%{ transform:translateY(105vh) rotate(360deg); opacity:.9; }
+  }
+
+  footer{ text-align:center; margin-top:46px; color:#46426e; font-size:11.5px; }
   footer .reset{ color:#46426e; background:none; border:none; cursor:pointer; text-decoration:underline; font-size:11.5px; }
 </style>
 </head>
 <body>
 <div class="wrap">
   <header>
-    <span class="kicker">30 dias · de graça · comigo</span>
+    <span class="kicker">🔥 30 dias · de graça · comigo</span>
     <h1>Ciclo Zero</h1>
     <p class="sub">Seu <b>primeiro ciclo</b> comigo te acompanhando de perto.<br>
-    Todo dia eu solto a <b>palavra do dia</b> aqui no grupo. Você digita e destrava o treino e o hábito daquele dia.</p>
+    Todo dia eu solto a <b>palavra do dia</b> no grupo. Você digita aqui e destrava o treino.</p>
+
+    <button class="hero-btn" id="heroBtn"><span class="em">⚡</span><span id="heroLabel">Abrir o dia de hoje</span></button>
+
     <div class="progress"><div class="bar" id="bar"></div></div>
-    <p class="progress-label"><b id="count">0</b> de 30 dias destravados</p>
+    <div class="stats">
+      <span class="chip">🔓 <b id="count">0</b>/30 destravados</span>
+      <span class="chip done">💪 <b id="countDone">0</b> concluídos</span>
+    </div>
   </header>
 
   <div class="trail" id="trail"></div>
@@ -211,6 +263,8 @@ src="https://www.facebook.com/tr?id=264800457918824&ev=PageView&noscript=1"/></n
   </footer>
 </div>
 
+<div id="confetti"></div>
+
 <!-- modal de palavra -->
 <div class="overlay" id="lockOverlay">
   <div class="modal">
@@ -220,7 +274,7 @@ src="https://www.facebook.com/tr?id=264800457918824&ev=PageView&noscript=1"/></n
     <p class="lock-txt">Esse dia ainda tá trancado.<br>Digite a <b>palavra do dia</b> que o Lucas mandou no grupo.</p>
     <div class="field">
       <input type="text" id="wordInput" placeholder="palavra do dia" autocomplete="off" autocapitalize="characters">
-      <button class="btn" id="unlockBtn">Abrir</button>
+      <button class="btn" id="unlockBtn">🔓 Abrir</button>
     </div>
     <p class="err" id="err"></p>
   </div>
@@ -234,7 +288,6 @@ src="https://www.facebook.com/tr?id=264800457918824&ev=PageView&noscript=1"/></n
 <script>
 // ====== CONTEUDO DOS 30 DIAS ======
 const DIAS = [
- // SEMANA 1 - Sair da inercia
  {d:1, s:1, sem:"Semana 1 · Sair da inércia", tit:"Marco Zero", pal:"COMECEI", tipo:"Treino corpo todo",
   treino:["Agachamento livre · 3x10","Flexão de joelhos (ou na parede) · 3x8","Ponte de glúteo · 3x12","Prancha · 3x20s","Marcha no lugar · 3x30s"],
   hab:"Anote seu peso, suas medidas e tire UMA foto de hoje. Esse é o seu ponto de partida. Beba 1 copo de água ao acordar.",
@@ -264,7 +317,6 @@ const DIAS = [
   hab:"Pare 2 minutos e anote: como você se sentiu nessa primeira semana?",
   fr:"7 dias. Você provou que consegue. Bora pra próxima."},
 
- // SEMANA 2 - Criar rotina
  {d:8, s:2, sem:"Semana 2 · Criar rotina", tit:"Mais volume", pal:"ROTINA", tipo:"Treino corpo todo",
   treino:["Agachamento livre · 4x12","Afundo · 3x12 cada","Flexão de joelhos · 3x10","Ponte de glúteo · 4x15","Prancha · 3x30s"],
   hab:"Monte o prato: metade dele de vegetais/salada no almoço.",
@@ -294,7 +346,6 @@ const DIAS = [
   hab:"Revise suas medidas. Sem cobrança, só registro do progresso.",
   fr:"Metade do caminho. Olha o quanto você já mudou."},
 
- // SEMANA 3 - Apertar o passo
  {d:15, s:3, sem:"Semana 3 · Apertar o passo", tit:"Circuito metabólico", pal:"SONO", tipo:"Circuito",
   treino:["4 rodadas, 1 min de descanso entre elas:","Agachamento · 15","Flexão · 10","Polichinelo · 30s","Ponte de glúteo · 15","Prancha · 30s"],
   hab:"Prioridade da semana: sono. Deite no mesmo horário hoje.",
@@ -324,7 +375,6 @@ const DIAS = [
   hab:"Revise a semana 3. Você cortou açúcar e dormiu melhor?",
   fr:"21 dias. Dizem que é o que cria um hábito. Você criou."},
 
- // SEMANA 4 - Virar estilo de vida
  {d:22, s:4, sem:"Semana 4 · Virar estilo de vida", tit:"Modo pico", pal:"PICO", tipo:"Circuito",
   treino:["5 rodadas, 1 min de descanso:","Agachamento · 15","Flexão · 10","Afundo · 10 cada","Ponte · 15","Prancha · 40s"],
   hab:"De manhã, planeje as refeições do dia. Antecipar evita furada.",
@@ -363,33 +413,66 @@ const DIAS = [
   fr:"Você fechou 30 dias seguidos. A maioria não chega nem ao dia 5."}
 ];
 
+// emoji por tipo de treino
+function emojiDia(dia){
+  if(dia.d===30) return "🏆";
+  const t = dia.tipo.toLowerCase();
+  if(t.includes("descanso")) return "😌";
+  if(t.includes("movimento")) return "🚶";
+  if(t.includes("circuito")||t.includes("amrap")) return "🔥";
+  if(t.includes("inferior")) return "🦵";
+  if(t.includes("superior")) return "💪";
+  if(t.includes("core")) return "🌀";
+  if(t.includes("corpo todo")) return "⚡";
+  return "🏋️";
+}
+
 // ====== ESTADO ======
 const KEY = "cicloZero_unlocked";
+const KEY_DONE = "cicloZero_done";
 let unlocked = JSON.parse(localStorage.getItem(KEY) || "[]");
+let done = JSON.parse(localStorage.getItem(KEY_DONE) || "[]");
 let pendingDay = null;
 
+const save = ()=>{ localStorage.setItem(KEY, JSON.stringify(unlocked)); localStorage.setItem(KEY_DONE, JSON.stringify(done)); };
 const norm = s => s.toUpperCase().replace(/[ÁÀÂÃÄ]/g,"A").replace(/[ÉÊÈ]/g,"E")
   .replace(/[ÍÎÌ]/g,"I").replace(/[ÓÔÕÒ]/g,"O").replace(/[ÚÛÙ]/g,"U").replace(/Ç/g,"C")
   .replace(/[^A-Z0-9]/g,"").trim();
 
+// ====== CONFETE ======
+function celebrate(set){
+  const box = document.getElementById('confetti');
+  const emojis = set || ["💪","🔥","✨","🎉","⭐"];
+  for(let i=0;i<22;i++){
+    const s = document.createElement('span');
+    s.className='conf'; s.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    s.style.left = Math.random()*100 + "vw";
+    s.style.fontSize = (18+Math.random()*18) + "px";
+    s.style.animationDuration = (1.6+Math.random()*1.3) + "s";
+    s.style.animationDelay = (Math.random()*.35) + "s";
+    box.appendChild(s);
+    setTimeout(()=>s.remove(), 3200);
+  }
+}
+
 // ====== RENDER DA TRILHA ======
 const trail = document.getElementById('trail');
-const SPACING = 116;       // distancia vertical entre nos
-const TOP = 70;            // margem de topo
-const FLAG_H = 46;         // altura reservada pra bandeira de semana
-let layout = [];           // {x,y,dia} por no
+const SPACING = 118;
+const TOP = 72;
+const FLAG_H = 48;
+let layout = [];
 
 function buildLayout(){
   layout = [];
   const W = trail.clientWidth || 480;
   const cx = W/2;
-  const amp = Math.min(W*0.30, 150); // amplitude da serpente
+  const amp = Math.min(W*0.30, 150);
   let y = TOP;
   let lastWeek = 0;
   let flags = [];
   DIAS.forEach((dia,i)=>{
-    if(dia.s !== lastWeek){ // nova semana: reserva espaco pra bandeira
-      flags.push({y:y - 30, sem:dia.s});
+    if(dia.s !== lastWeek){
+      flags.push({y:y - 32, sem:dia.s});
       y += FLAG_H;
       lastWeek = dia.s;
     }
@@ -405,7 +488,6 @@ function render(){
   trail.style.height = height + "px";
   trail.innerHTML = "";
 
-  // svg da linha conectora
   const svgNS = "http://www.w3.org/2000/svg";
   const svg = document.createElementNS(svgNS,"svg");
   svg.setAttribute("viewBox", `0 0 ${trail.clientWidth} ${height}`);
@@ -421,47 +503,67 @@ function render(){
   svg.appendChild(path);
   trail.appendChild(svg);
 
-  // bandeiras de semana
-  const semNomes = {1:"Semana 1",2:"Semana 2",3:"Semana 3",4:"Semana 4"};
+  const semInfo = {1:["Semana 1","🌱"],2:["Semana 2","🔁"],3:["Semana 3","🔥"],4:["Semana 4","🏆"]};
   flags.forEach(f=>{
     const el = document.createElement("div");
-    el.className = "week-flag";
+    el.className = "week-flag f"+f.sem;
     el.style.top = f.y + "px";
-    el.textContent = semNomes[f.sem];
+    el.innerHTML = `<span>${semInfo[f.sem][1]}</span> ${semInfo[f.sem][0]}`;
     trail.appendChild(el);
   });
 
-  // proximo dia a abrir = primeiro nao desbloqueado
   let nextDay = null;
   for(const dia of DIAS){ if(!unlocked.includes(dia.d)){ nextDay = dia.d; break; } }
 
-  // nos
   layout.forEach(p=>{
     const dia = DIAS[p.i];
     const isOpen = unlocked.includes(dia.d);
+    const isDone = done.includes(dia.d);
     const isNext = dia.d === nextDay;
     const node = document.createElement("div");
-    node.className = "node " + (isOpen?"open":(isNext?"next":"locked"));
+    let cls = "node ";
+    if(isDone) cls += "done w"+dia.s;
+    else if(isOpen) cls += "open w"+dia.s;
+    else if(isNext) cls += "next";
+    else cls += "locked";
+    node.className = cls;
     node.style.left = p.x + "px";
     node.style.top = p.y + "px";
-    const inner = isOpen
-      ? `<span class="num">${dia.d}</span><span class="check">✓</span>`
-      : `<span class="ic">${isNext?"⭑":"🔒"}</span>`;
-    node.innerHTML = `<div class="disc">${inner}</div><span class="day-tag">Dia ${dia.d}</span>`;
-    node.onclick = ()=> onNodeClick(dia, isOpen);
+    let face;
+    if(isDone) face = "🏆";
+    else if(isOpen) face = emojiDia(dia);
+    else if(isNext) face = `<span class="ic">⭐</span>`;
+    else face = `<span class="ic">🔒</span>`;
+    node.innerHTML = `<div class="disc">${face}</div><span class="day-tag">Dia ${dia.d}</span>`;
+    node.onclick = ()=> openDay(dia);
     trail.appendChild(node);
   });
 
-  // progresso
-  const n = unlocked.length;
-  document.getElementById('count').textContent = n;
-  document.getElementById('bar').style.width = (n/30*100) + "%";
+  document.getElementById('count').textContent = unlocked.length;
+  document.getElementById('countDone').textContent = done.length;
+  document.getElementById('bar').style.width = (unlocked.length/30*100) + "%";
+
+  // label do botao hero
+  const label = document.getElementById('heroLabel');
+  const heroEm = document.querySelector('#heroBtn .em');
+  if(unlocked.length >= 30 && done.length >= 30){ label.textContent = "Você fechou o Ciclo Zero!"; heroEm.textContent="🏆"; }
+  else if(nextDay === null){ label.textContent = "Ver meu treino de hoje"; heroEm.textContent="💪"; }
+  else { label.textContent = "Abrir o dia de hoje"; heroEm.textContent="⚡"; }
 }
 
-function onNodeClick(dia, isOpen){
-  if(isOpen){ showContent(dia); }
-  else { openLock(dia); }
+function openDay(dia){
+  if(unlocked.includes(dia.d)) showContent(dia);
+  else openLock(dia);
 }
+
+// botao hero: vai pro dia certo
+function irParaHoje(){
+  let alvo = DIAS.find(d=>!unlocked.includes(d.d));   // proximo a destravar
+  if(!alvo) alvo = DIAS.find(d=>!done.includes(d.d)); // ou proximo a concluir
+  if(!alvo) alvo = DIAS[29];                          // ou o ultimo
+  openDay(alvo);
+}
+document.getElementById('heroBtn').onclick = irParaHoje;
 
 // ====== MODAL PALAVRA ======
 function openLock(dia){
@@ -475,17 +577,15 @@ function openLock(dia){
 function tryUnlock(){
   if(!pendingDay) return;
   const val = norm(document.getElementById('wordInput').value);
-  if(!val){ return; }
+  if(!val) return;
   if(val === norm(pendingDay.pal)){
     if(!unlocked.includes(pendingDay.d)){
-      unlocked.push(pendingDay.d);
-      localStorage.setItem(KEY, JSON.stringify(unlocked));
+      unlocked.push(pendingDay.d); save();
       if(window.fbq) fbq('trackCustom','DiaDestravado',{dia:pendingDay.d});
     }
     const dia = pendingDay;
-    closeAll();
-    render();
-    setTimeout(()=>showContent(dia), 200);
+    closeAll(); render(); celebrate(["🔓","✨","🎉","⭐"]);
+    setTimeout(()=>showContent(dia), 250);
   } else {
     document.getElementById('err').textContent = "Palavra errada. Confere no grupo o que o Lucas mandou hoje.";
     document.getElementById('wordInput').focus();
@@ -498,14 +598,23 @@ document.getElementById('wordInput').addEventListener('keydown', e=>{ if(e.key==
 function showContent(dia){
   const m = document.getElementById('contentModal');
   const exItems = dia.treino.map(t=>`<li>${t}</li>`).join("");
+  const isDone = done.includes(dia.d);
+  const proximo = DIAS.find(d=> d.d===dia.d+1 && unlocked.includes(d.d));
   const ctaBlock = dia.cta ? `
     <div class="cta">
       <h3>Terminou o Ciclo Zero 🏆</h3>
       <p>Esse foi só o aquecimento. Quer continuar evoluindo comigo te acompanhando de perto, com treino e dieta no seu nome? Tenho uma condição especial pra quem terminou o Ciclo Zero.</p>
-      <a href="https://www.instagram.com/personaltrainerlucaslima" target="_blank" rel="noopener">Quero continuar no direct</a>
+      <a href="https://www.instagram.com/personaltrainerlucaslima" target="_blank" rel="noopener">💬 Quero continuar no direct</a>
     </div>` : "";
+  const doneBtn = isDone
+    ? `<button class="btn done-state full" id="doneBtn">✅ Treino concluído (tocar pra desmarcar)</button>`
+    : `<button class="btn gold full" id="doneBtn">💪 Concluí o treino de hoje</button>`;
+  const navBtn = proximo
+    ? `<button class="btn ghost" id="nextBtn">Próximo dia →</button>`
+    : `<button class="btn ghost" id="closeBtn">Fechar</button>`;
   m.innerHTML = `
     <button class="x" onclick="closeAll()">&times;</button>
+    <div class="m-emoji">${emojiDia(dia)}</div>
     <p class="m-day">Dia ${dia.d} · ${dia.tipo}</p>
     <h2 class="m-title">${dia.tit}</h2>
     <p class="m-week">${dia.sem}</p>
@@ -519,8 +628,28 @@ function showContent(dia){
     </div>
     <p class="frase">"${dia.fr}"</p>
     ${ctaBlock}
+    <div class="m-actions">
+      ${doneBtn}
+      <div class="row2">${navBtn}</div>
+    </div>
   `;
+  document.getElementById('doneBtn').onclick = ()=> toggleDone(dia);
+  const nb = document.getElementById('nextBtn');
+  if(nb) nb.onclick = ()=>{ closeAll(); setTimeout(()=>showContent(proximo), 150); };
+  const cb = document.getElementById('closeBtn');
+  if(cb) cb.onclick = closeAll;
   document.getElementById('contentOverlay').classList.add('show');
+}
+
+function toggleDone(dia){
+  if(done.includes(dia.d)){
+    done = done.filter(x=>x!==dia.d); save(); render(); showContent(dia);
+  } else {
+    done.push(dia.d); save(); render();
+    if(window.fbq) fbq('trackCustom','TreinoConcluido',{dia:dia.d});
+    celebrate(dia.d===30 ? ["🏆","🎉","✨","💪","⭐"] : ["💪","🔥","✨","🎉"]);
+    showContent(dia);
+  }
 }
 
 function closeAll(){
@@ -534,7 +663,7 @@ function closeAll(){
 
 document.getElementById('reset').onclick = ()=>{
   if(confirm("Isso apaga o seu progresso e tranca todos os dias de novo. Tem certeza?")){
-    unlocked = []; localStorage.removeItem(KEY); render();
+    unlocked = []; done = []; save(); render();
   }
 };
 
