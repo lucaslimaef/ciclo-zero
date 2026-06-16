@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guia do Participante · Ciclo Zero</title>
+<!-- Pixel Performix -->
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '264800457918824');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=264800457918824&ev=PageView&noscript=1"/></noscript>
+<style>
+  *{ margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  :root{
+    --bg:#0a0a16;
+    --roxo:#7c3aed; --azul:#4f46e5;
+    --neon:#a78bfa; --neon2:#818cf8;
+    --txt:#ece9ff; --txt2:#9b96c7;
+    --card:#13122a; --line:rgba(255,255,255,.08);
+    --gold:#fbbf24; --verde:#34d399;
+  }
+  html,body{ background:var(--bg); color:var(--txt); font-family:'Segoe UI',system-ui,sans-serif; }
+  body{
+    background:
+      radial-gradient(1100px 560px at 50% -8%, rgba(124,58,237,.30), transparent 60%),
+      radial-gradient(800px 460px at 92% 22%, rgba(79,70,229,.18), transparent 60%),
+      var(--bg);
+    min-height:100vh; overflow-x:hidden; line-height:1.55;
+  }
+  .wrap{ max-width:620px; margin:0 auto; padding:0 18px 90px; }
+
+  /* HERO */
+  header{ text-align:center; padding:40px 0 6px; }
+  .kicker{
+    display:inline-block; font-size:11px; letter-spacing:2.5px; text-transform:uppercase;
+    color:var(--neon); border:1px solid rgba(167,139,250,.4); border-radius:99px;
+    padding:5px 14px; margin-bottom:16px; background:rgba(124,58,237,.1);
+  }
+  h1{
+    font-size:46px; line-height:1.02; font-weight:800; letter-spacing:-1px;
+    background:linear-gradient(120deg,#fff, var(--neon) 60%, var(--neon2));
+    -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+  }
+  .lead{ color:var(--txt2); font-size:15px; margin-top:14px; }
+  .lead b{ color:var(--txt); font-weight:600; }
+
+  /* INDICE */
+  .toc{ display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin:24px 0 8px; }
+  .toc a{
+    font-size:12.5px; color:var(--txt2); text-decoration:none;
+    background:rgba(255,255,255,.05); border:1px solid var(--line);
+    padding:7px 13px; border-radius:99px; transition:.15s;
+  }
+  .toc a:active{ transform:scale(.96); }
+  .toc a:hover{ color:var(--neon); border-color:rgba(167,139,250,.5); }
+
+  /* SECOES */
+  section{
+    background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01));
+    border:1px solid var(--line); border-radius:22px;
+    padding:26px 22px; margin-top:18px; scroll-margin-top:16px;
+  }
+  .head{ display:flex; align-items:center; gap:13px; margin-bottom:14px; }
+  .num{
+    flex:0 0 auto; width:38px; height:38px; border-radius:12px;
+    display:flex; align-items:center; justify-content:center;
+    font-weight:800; font-size:17px; color:#fff;
+    background:linear-gradient(150deg,var(--azul),var(--roxo));
+    box-shadow:0 8px 20px rgba(124,58,237,.4);
+  }
+  h2{ font-size:22px; font-weight:800; letter-spacing:-.3px; }
+  p{ color:#cdc8f0; font-size:14.5px; margin:9px 0; }
+  p b{ color:#fff; }
+  .muted{ color:var(--txt2); font-size:13px; }
+  ul{ margin:10px 0 4px; padding-left:2px; list-style:none; }
+  li{ color:#cdc8f0; font-size:14.5px; margin:9px 0; padding-left:26px; position:relative; }
+  li::before{ content:"›"; position:absolute; left:6px; top:-1px; color:var(--neon); font-weight:800; font-size:17px; }
+  li b{ color:#fff; }
+
+  .callout{
+    border:1px solid rgba(167,139,250,.32); background:rgba(124,58,237,.10);
+    border-radius:14px; padding:14px 16px; margin:14px 0; font-size:14px; color:#ded9ff;
+  }
+  .callout.gold{ border-color:rgba(251,191,36,.32); background:rgba(251,191,36,.08); color:#f6e6b8; }
+  .callout.green{ border-color:rgba(52,211,153,.3); background:rgba(16,185,129,.08); color:#bdf0dc; }
+  .callout b{ color:#fff; }
+
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:9px;
+    border:none; cursor:pointer; font-family:inherit; font-weight:800; font-size:15px;
+    color:#fff; padding:14px 22px; border-radius:14px; text-decoration:none; margin-top:6px;
+    background:linear-gradient(120deg,var(--azul),var(--roxo),var(--neon));
+    box-shadow:0 10px 26px rgba(124,58,237,.45); transition:transform .12s;
+  }
+  .btn:active{ transform:scale(.97); }
+  .btn.ghost{ background:transparent; border:1.5px solid rgba(167,139,250,.45); color:var(--neon); box-shadow:none; }
+  .btn.green{ background:linear-gradient(120deg,#10b981,#34d399); box-shadow:0 10px 26px rgba(16,185,129,.35); }
+
+  /* SEMANAS */
+  .weeks{ display:grid; gap:10px; margin-top:8px; }
+  .week{ display:flex; gap:13px; align-items:flex-start; background:rgba(255,255,255,.03); border:1px solid var(--line); border-radius:14px; padding:13px 15px; }
+  .week .wn{ flex:0 0 auto; font-weight:800; color:var(--neon); font-size:13px; background:rgba(124,58,237,.14); border:1px solid rgba(167,139,250,.3); border-radius:8px; padding:4px 9px; }
+  .week .wt b{ color:#fff; font-size:14.5px; }
+  .week .wt span{ display:block; color:var(--txt2); font-size:12.5px; margin-top:2px; }
+
+  /* PONTOS */
+  table{ width:100%; border-collapse:collapse; margin-top:8px; font-size:14px; }
+  th,td{ text-align:left; padding:11px 10px; border-bottom:1px solid var(--line); }
+  th{ color:var(--txt2); font-size:12px; text-transform:uppercase; letter-spacing:1px; font-weight:700; }
+  td.pts{ text-align:right; font-weight:800; color:var(--gold); white-space:nowrap; }
+  td:first-child b{ color:#fff; }
+
+  /* AVALIACAO / FICHA */
+  .ficha{ margin-top:10px; }
+  .ficha .grid{ display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:8px 10px; align-items:center; }
+  .ficha .grid .h{ color:var(--txt2); font-size:11.5px; text-transform:uppercase; letter-spacing:.8px; font-weight:700; padding-bottom:2px; }
+  .ficha label{ color:#cdc8f0; font-size:13.5px; }
+  .ficha input{
+    width:100%; background:#0c0b1d; border:1px solid var(--line); border-radius:10px;
+    color:#fff; font-family:inherit; font-size:15px; padding:10px 11px; text-align:center;
+  }
+  .ficha input:focus{ outline:none; border-color:var(--neon); box-shadow:0 0 0 3px rgba(124,58,237,.18); }
+  .ficha input.txt{ text-align:left; }
+  .ficha .diff{ text-align:center; font-weight:800; font-size:14px; color:var(--txt2); }
+  .ficha .diff.up{ color:#fca5a5; }
+  .ficha .diff.down{ color:var(--verde); }
+  .ficha-actions{ display:flex; gap:10px; flex-wrap:wrap; margin-top:16px; }
+  .saved{ font-size:13px; color:var(--verde); margin-top:10px; min-height:18px; }
+
+  .photolist li::before{ content:"📸"; font-size:13px; top:1px; }
+
+  /* FAQ */
+  details{ border:1px solid var(--line); border-radius:13px; padding:0 16px; margin:9px 0; background:rgba(255,255,255,.02); }
+  details[open]{ border-color:rgba(167,139,250,.35); }
+  summary{ cursor:pointer; font-weight:700; font-size:14.5px; color:#fff; padding:14px 0; list-style:none; position:relative; padding-right:26px; }
+  summary::-webkit-details-marker{ display:none; }
+  summary::after{ content:"+"; position:absolute; right:2px; top:12px; font-size:20px; color:var(--neon); }
+  details[open] summary::after{ content:"–"; }
+  details p{ margin-top:0; padding-bottom:14px; }
+
+  footer{ text-align:center; margin-top:34px; color:var(--txt2); font-size:13px; }
+  footer b{ color:var(--neon); }
+  .assin{ font-size:14px; color:#cdc8f0; margin-top:6px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <span class="kicker">Seu primeiro ciclo · 30 dias</span>
+    <h1>Bem-vindo<br>ao Ciclo Zero</h1>
+    <p class="lead">Trinta dias pra <b>sair da inércia</b> e transformar treino, comida e água em rotina. Sem promessa de milagre. É o ciclo que vem antes de qualquer resultado de verdade. Leia este guia inteiro <b>antes do dia 1</b>. Ele explica como tudo funciona.</p>
+  </header>
+
+  <nav class="toc">
+    <a href="#como">Como funciona</a>
+    <a href="#semanas">As 4 semanas</a>
+    <a href="#jogo">EU vs EU</a>
+    <a href="#pontos">Pontuação</a>
+    <a href="#avaliacao">Avaliação inicial</a>
+    <a href="#acompanhamento">Acompanhamento</a>
+    <a href="#combinado">O combinado</a>
+    <a href="#faq">Dúvidas</a>
+  </nav>
+
+  <!-- 1 COMO FUNCIONA -->
+  <section id="como">
+    <div class="head"><div class="num">1</div><h2>Como funciona</h2></div>
+    <p>Tudo acontece na <b>trilha do Ciclo Zero</b>: um mapa de 30 dias. Cada dia traz o foco, o treino com dica de execução, a ideia de alimentação e o hábito do dia.</p>
+    <ul>
+      <li><b>1 dia destrava por vez.</b> Todo dia eu solto a <b>palavra do dia</b> no canal do desafio. Você digita ela na trilha e abre o treino daquele dia.</li>
+      <li><b>Seu progresso fica salvo</b> no próprio aparelho. Pode fechar e voltar que continua de onde parou.</li>
+      <li><b>Ritmo é 1 por dia.</b> A palavra existe pra te manter no compasso, não pra você correr os 30 de uma vez.</li>
+      <li>Concluiu o dia? Marque como feito. A barra de progresso enche e vira dourada.</li>
+    </ul>
+    <a class="btn" href="https://lucaslimaef.github.io/ciclo-zero" target="_blank" rel="noopener">▶ Abrir a trilha do Ciclo Zero</a>
+    <p class="muted" style="margin-top:12px">Salve esse link nos favoritos. É por ele que você acessa o desafio todos os dias.</p>
+  </section>
+
+  <!-- 2 SEMANAS -->
+  <section id="semanas">
+    <div class="head"><div class="num">2</div><h2>As 4 semanas</h2></div>
+    <p>Os 30 dias sobem de degrau em degrau. Cada semana tem um trabalho:</p>
+    <div class="weeks">
+      <div class="week"><div class="wn">Sem 1</div><div class="wt"><b>Sair da inércia</b><span>Dias 1 a 7 · voltar a se mexer sem dó nem culpa.</span></div></div>
+      <div class="week"><div class="wn">Sem 2</div><div class="wt"><b>Criar rotina</b><span>Dias 8 a 14 · treino e hábitos virando parte do dia.</span></div></div>
+      <div class="week"><div class="wn">Sem 3</div><div class="wt"><b>Apertar o passo</b><span>Dias 15 a 21 · subir a intensidade, ajustar a comida.</span></div></div>
+      <div class="week"><div class="wn">Sem 4</div><div class="wt"><b>Virar estilo de vida</b><span>Dias 22 a 30 · fixar o que funcionou. Dia 30 = reteste do dia 1.</span></div></div>
+    </div>
+    <div class="callout gold">No <b>dia 30</b> você repete o treino do dia 1 e sente na pele o quanto evoluiu. É também quando comparamos as fotos e medidas da sua avaliação.</div>
+  </section>
+
+  <!-- 3 JOGO -->
+  <section id="jogo">
+    <div class="head"><div class="num">3</div><h2>O jogo: EU vs EU</h2></div>
+    <p>O adversário aqui não é ninguém do grupo. É <b>você de ontem</b>. A lógica do <b>EU vs EU</b> é simples: cada hábito que você cumpre no dia vira ponto, e os pontos te mostram a sua sequência crescendo.</p>
+    <ul>
+      <li>Cada tarefa cumprida (treino, água, comida no foco) vira <b>pontuação</b>.</li>
+      <li>Não é pra te comparar com os outros. É pra você ver a sua própria evolução, dia após dia.</li>
+      <li>Mandou a <b>prova</b> (foto/print do treino feito) no canal do desafio e a pontuação conta. É o que te mantém honesto com você mesmo.</li>
+    </ul>
+    <p class="muted" style="margin-top:12px">Faça o check-in todo dia, de preferência logo depois de treinar.</p>
+  </section>
+
+  <!-- 4 PONTOS -->
+  <section id="pontos">
+    <div class="head"><div class="num">4</div><h2>Como você pontua</h2></div>
+    <p>A regra é simples: <b>hábito cumprido = ponto</b>. Junte o dia inteiro e suba no ranking.</p>
+    <table>
+      <tr><th>Tarefa do dia</th><th style="text-align:right">Pontos</th></tr>
+      <tr><td><b>Treino do dia</b> concluído</td><td class="pts">+10</td></tr>
+      <tr><td>Bater a <b>meta de água</b></td><td class="pts">+5</td></tr>
+      <tr><td><b>Alimentação</b> dentro do foco do dia</td><td class="pts">+5</td></tr>
+      <tr><td>Postar a <b>prova</b> do treino no canal</td><td class="pts">+5</td></tr>
+      <tr><td>Check-in / presença no canal</td><td class="pts">+2</td></tr>
+      <tr><td><b>Sequência</b>: 7 dias seguidos sem furar</td><td class="pts">+15</td></tr>
+    </table>
+    <div class="callout">Furou um dia? Sem drama. Não some, volta no dia seguinte. <b>Quem não desiste sempre passa quem some.</b></div>
+  </section>
+
+  <!-- 5 AVALIACAO -->
+  <section id="avaliacao">
+    <div class="head"><div class="num">5</div><h2>Avaliação inicial (faça antes do dia 1)</h2></div>
+    <p>Antes de começar, tire uma <b>foto do seu ponto de partida</b>. Isso é só seu, fica no seu aparelho e <b>nada é enviado pra mim</b>. No dia 30 você reabre, preenche a coluna do final e vê a diferença com os próprios olhos.</p>
+
+    <h2 style="font-size:16px;margin:18px 0 4px">📏 Suas medidas</h2>
+    <p class="muted">Use uma fita métrica, de manhã, em jejum, sem prender a barriga. Anote em cm (peso em kg).</p>
+    <div class="ficha">
+      <div class="grid">
+        <div class="h">Medida</div><div class="h" style="text-align:center">Início</div><div class="h" style="text-align:center">Dia 30</div>
+
+        <label>Peso (kg)</label><input data-row="peso" data-col="ini" inputmode="decimal"><input data-row="peso" data-col="fim" inputmode="decimal">
+        <label>Cintura</label><input data-row="cintura" data-col="ini" inputmode="decimal"><input data-row="cintura" data-col="fim" inputmode="decimal">
+        <label>Abdômen (umbigo)</label><input data-row="abdomen" data-col="ini" inputmode="decimal"><input data-row="abdomen" data-col="fim" inputmode="decimal">
+        <label>Quadril / glúteo</label><input data-row="quadril" data-col="ini" inputmode="decimal"><input data-row="quadril" data-col="fim" inputmode="decimal">
+        <label>Coxa</label><input data-row="coxa" data-col="ini" inputmode="decimal"><input data-row="coxa" data-col="fim" inputmode="decimal">
+        <label>Braço</label><input data-row="braco" data-col="ini" inputmode="decimal"><input data-row="braco" data-col="fim" inputmode="decimal">
+        <label>Peito / tórax</label><input data-row="peito" data-col="ini" inputmode="decimal"><input data-row="peito" data-col="fim" inputmode="decimal">
+      </div>
+      <div class="ficha-actions">
+        <button class="btn" id="salvar">💾 Salvar minha avaliação</button>
+        <button class="btn ghost" id="comparar">📊 Ver diferença</button>
+      </div>
+      <div class="saved" id="aviso"></div>
+      <div id="resultado"></div>
+    </div>
+
+    <h2 style="font-size:16px;margin:22px 0 4px">📸 Suas fotos</h2>
+    <p class="muted">Tire as 3 fotos no mesmo lugar, mesma luz, mesma roupa (de preferência justa), sem flexionar. Salve numa pasta no celular e <b>não apague</b>, você vai refazê-las no dia 30.</p>
+    <ul class="photolist">
+      <li><b>De frente</b> · braços relaxados ao lado do corpo.</li>
+      <li><b>De costas</b> · mesma pose.</li>
+      <li><b>De lado</b> · perfil, postura natural (sem empinar nem encolher).</li>
+    </ul>
+    <div class="callout green">Quer minha ajuda olhando essas fotos? <b>Aí sim você me manda.</b> Com elas eu faço sua <b>avaliação postural</b> e, se for o caso, te oriento outra forma de fazer o treino pro seu biotipo. Mas só se você quiser. O padrão é guardar pra você mesmo.</div>
+  </section>
+
+  <!-- 6 ACOMPANHAMENTO -->
+  <section id="acompanhamento">
+    <div class="head"><div class="num">6</div><h2>Como vai ser o acompanhamento</h2></div>
+    <ul>
+      <li><b>Dúvida diária, no privado.</b> Travou num exercício, na comida, na rotina? Me chama no direto. Eu acompanho e te oriento no que precisar, dia após dia.</li>
+      <li><b>Grupos no meio do caminho.</b> Por volta do <b>dia 15</b>, quem continuou firme entra num grupo de WhatsApp comigo. Cada grupo tem no <b>máximo 10 pessoas</b>, que é o número que me deixa dar atenção de verdade a todos. Se forem 100 ativos, viram 10 turmas de 10.</li>
+    </ul>
+    <div class="callout">Por que só no meio? Porque <b>muita gente sai pelo caminho</b>, e é normal. Quem chega na metade chegou porque <b>quer de verdade</b>. Esse é o grupo que eu seguro mais de perto até o dia 30.</div>
+    <p class="muted">Continuar firme = estar fazendo os treinos e pontuando no EU vs EU. Não precisa ser perfeito, precisa estar presente.</p>
+  </section>
+
+  <!-- 7 COMBINADO -->
+  <section id="combinado">
+    <div class="head"><div class="num">7</div><h2>O combinado</h2></div>
+    <p>Pra isso funcionar, fechamos um trato simples:</p>
+    <ul>
+      <li>Aparecer <b>todos os dias</b> na trilha pra pegar a palavra e o treino.</li>
+      <li>Fazer o <b>check-in todos os dias</b>, com prova do treino.</li>
+      <li>Tratar o desafio como <b>compromisso seu</b>, não como tarefa minha.</li>
+      <li><b>Antes de começar</b>, conversar com seu médico se tiver qualquer condição de saúde. Eu sou personal, não substituo médico nem nutricionista.</li>
+    </ul>
+    <div class="callout gold">Resultado de 30 dias não é mágica, é <b>repetição</b>. Sua única meta é não furar dois dias seguidos.</div>
+  </section>
+
+  <!-- 8 FAQ -->
+  <section id="faq">
+    <div class="head"><div class="num">8</div><h2>Dúvidas rápidas</h2></div>
+    <details><summary>Preciso de equipamento ou academia?</summary><p>Não. A maioria dos treinos é em casa, com o peso do corpo. Se tiver mais coisa, eu te mostro como usar.</p></details>
+    <details><summary>E se eu perder um dia?</summary><p>Você retoma do ponto onde parou. A trilha não trava por isso. Só não vire hábito sumir. O jogo é não desistir.</p></details>
+    <details><summary>Tenho que mandar minhas fotos e medidas pra você?</summary><p>Não. É tudo seu, fica no seu aparelho. Só me manda se quiser que eu faça sua avaliação postural e ajuste o treino pro seu corpo.</p></details>
+    <details><summary>Quanto custa?</summary><p>O Ciclo Zero é <b>grátis</b>. É o primeiro ciclo. Quem quiser continuar com acompanhamento individual depois, eu explico a consultoria no dia 30.</p></details>
+    <details><summary>E a parte da alimentação?</summary><p>Dou direções gerais pra te ajudar no dia a dia. Plano alimentar fechado é coisa de nutricionista, e não substituo esse trabalho.</p></details>
+  </section>
+
+  <footer>
+    <p class="assin">Bora pro seu <b>primeiro ciclo</b>. Te vejo na trilha.</p>
+    <p style="margin-top:6px">Lucas Lima · <b>Personal Trainer</b></p>
+  </footer>
+
+</div>
+
+<script>
+  var KEY = 'ciclo_zero_avaliacao_v1';
+  var ROWS = {peso:'Peso (kg)', cintura:'Cintura', abdomen:'Abdômen', quadril:'Quadril/glúteo', coxa:'Coxa', braco:'Braço', peito:'Peito/tórax'};
+  var inputs = document.querySelectorAll('.ficha input');
+
+  function load(){
+    var data = {};
+    try{ data = JSON.parse(localStorage.getItem(KEY) || '{}'); }catch(e){}
+    inputs.forEach(function(inp){
+      var k = inp.dataset.row + '_' + inp.dataset.col;
+      if(data[k]) inp.value = data[k];
+    });
+    return data;
+  }
+  function save(){
+    var data = {};
+    inputs.forEach(function(inp){
+      if(inp.value.trim()) data[inp.dataset.row + '_' + inp.dataset.col] = inp.value.trim();
+    });
+    localStorage.setItem(KEY, JSON.stringify(data));
+    var aviso = document.getElementById('aviso');
+    aviso.textContent = '✓ Salvo no seu aparelho. Ninguém mais vê isso.';
+    setTimeout(function(){ aviso.textContent=''; }, 3500);
+  }
+  function num(v){ v = (v||'').replace(',', '.'); var n = parseFloat(v); return isNaN(n) ? null : n; }
+
+  function comparar(){
+    var box = document.getElementById('resultado');
+    var rows = '';
+    var algum = false;
+    Object.keys(ROWS).forEach(function(r){
+      var ini = num(document.querySelector('[data-row="'+r+'"][data-col="ini"]').value);
+      var fim = num(document.querySelector('[data-row="'+r+'"][data-col="fim"]').value);
+      if(ini!==null && fim!==null){
+        algum = true;
+        var d = +(fim - ini).toFixed(1);
+        var cls = d < 0 ? 'down' : (d > 0 ? 'up' : '');
+        var sinal = d > 0 ? '+' : '';
+        var seta = d < 0 ? '▼' : (d > 0 ? '▲' : '–');
+        rows += '<tr><td><b>'+ROWS[r]+'</b></td><td style="text-align:center;color:var(--txt2)">'+ini+'</td><td style="text-align:center;color:#fff">'+fim+'</td><td class="diff '+cls+'" style="text-align:right">'+seta+' '+sinal+d+'</td></tr>';
+      }
+    });
+    if(!algum){
+      box.innerHTML = '<div class="callout">Preencha as colunas <b>Início</b> e <b>Dia 30</b> de pelo menos uma medida pra ver a diferença. (No começo do desafio, só a coluna Início.)</div>';
+      return;
+    }
+    box.innerHTML = '<table style="margin-top:16px"><tr><th>Medida</th><th style="text-align:center">Início</th><th style="text-align:center">Dia 30</th><th style="text-align:right">Diferença</th></tr>'+rows+'</table><p class="muted" style="margin-top:8px">Verde = diminuiu · vermelho = aumentou. Em medida de corpo, na maioria dos casos o caminho é pra baixo.</p>';
+    box.scrollIntoView({behavior:'smooth', block:'nearest'});
+  }
+
+  inputs.forEach(function(inp){ inp.addEventListener('change', save); });
+  document.getElementById('salvar').addEventListener('click', function(){ save(); if(typeof fbq==='function') fbq('trackCustom','AvaliacaoSalva'); });
+  document.getElementById('comparar').addEventListener('click', comparar);
+  load();
+</script>
+</body>
+</html>
