@@ -279,9 +279,65 @@ src="https://www.facebook.com/tr?id=264800457918824&ev=PageView&noscript=1"/></n
   footer{ text-align:center; margin-top:46px; color:#5a567e; font-size:11.5px; line-height:1.6; }
   footer .disc-foot{ display:block; max-width:420px; margin:0 auto 10px; color:#46426e; }
   footer .reset{ color:#46426e; background:none; border:none; cursor:pointer; text-decoration:underline; font-size:11.5px; }
-</style>
+
+  /* ===== TARJA "EM BREVE" ===== */
+  body.teaser-on{ overflow:hidden; height:100vh; }
+  body.teaser-on .wrap{ filter:blur(8px) saturate(.7) brightness(.5); pointer-events:none; user-select:none; }
+  #teaser{ display:none; }
+  body.teaser-on #teaser{
+    display:flex; position:fixed; inset:0; z-index:400; overflow:hidden;
+    align-items:center; justify-content:center; padding:22px;
+    background:radial-gradient(900px 520px at 50% 28%, rgba(124,58,237,.30), transparent 62%), rgba(6,6,16,.55);
+  }
+  #teaser .band{
+    position:absolute; left:-30%; width:160%; white-space:nowrap; overflow:hidden;
+    color:#fff; font-weight:900; letter-spacing:5px; text-transform:uppercase; font-size:15px;
+    padding:11px 0; text-align:center; transform:rotate(-7deg); opacity:.96;
+    border-top:2px dashed rgba(255,255,255,.45); border-bottom:2px dashed rgba(255,255,255,.45);
+    box-shadow:0 16px 34px rgba(0,0,0,.45); text-shadow:0 1px 2px rgba(0,0,0,.3);
+  }
+  #teaser .band.b1{ top:13%; background:linear-gradient(100deg,var(--azul),var(--roxo)); }
+  #teaser .band.b2{ top:45%; background:linear-gradient(100deg,var(--roxo),var(--neon)); }
+  #teaser .band.b3{ top:77%; background:linear-gradient(100deg,var(--azul),var(--roxo)); }
+  #teaser .card{
+    position:relative; z-index:2; max-width:380px; text-align:center;
+    background:rgba(13,12,34,.92); border:1px solid rgba(167,139,250,.45); border-radius:24px;
+    padding:30px 24px; box-shadow:0 30px 80px rgba(0,0,0,.65); backdrop-filter:blur(2px);
+  }
+  #teaser .tkick{
+    display:inline-block; font-size:11px; letter-spacing:2.5px; text-transform:uppercase; color:var(--neon);
+    border:1px solid rgba(167,139,250,.4); border-radius:99px; padding:5px 14px; margin-bottom:16px;
+    background:rgba(124,58,237,.12);
+  }
+  #teaser h2{
+    font-size:38px; line-height:1.02; font-weight:800; letter-spacing:-1px; margin-bottom:14px;
+    background:linear-gradient(120deg,#fff,var(--neon) 60%,var(--neon2));
+    -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+  }
+  #teaser .ttxt{ color:#cdc8f0; font-size:14.5px; line-height:1.55; }
+  #teaser .ttxt b{ color:#fff; }
+  #teaser .tlock{
+    display:inline-flex; align-items:center; gap:8px; margin:18px 0 6px; font-weight:800; font-size:14px;
+    color:#f6e6b8; background:rgba(251,191,36,.1); border:1px solid rgba(251,191,36,.35);
+    border-radius:99px; padding:9px 18px;
+  }
+  #teaser .tnote{ color:#9b96c7; font-size:13px; margin-top:10px; }
 </head>
-<body>
+<body class="teaser-on">
+
+<div id="teaser">
+  <div class="band b1">em breve · ciclo zero · em breve · ciclo zero · em breve · ciclo zero · em breve · ciclo zero ·</div>
+  <div class="band b2">prepara · 30 dias · prepara · 30 dias · prepara · 30 dias · prepara · 30 dias · prepara · 30 dias ·</div>
+  <div class="band b3">em breve · ciclo zero · em breve · ciclo zero · em breve · ciclo zero · em breve · ciclo zero ·</div>
+  <div class="card">
+    <span class="tkick">⏳ acesso em breve</span>
+    <h2>Ainda não<br>é a hora.</h2>
+    <p class="ttxt">O <b>Ciclo Zero</b> está prestes a começar. Quando a largada bater, é aqui que a sua virada de <b>30 dias</b> acontece, um dia de cada vez.</p>
+    <div class="tlock">🔒 Dia 1 trancado</div>
+    <p class="tnote">Fica de olho no meu direto. Eu aviso a hora exata de abrir o Dia 1.</p>
+  </div>
+</div>
+
 <div class="wrap">
   <header>
     <span class="kicker">🔥 30 dias · de graça · comigo</span>
@@ -881,6 +937,11 @@ document.getElementById('reset').onclick = ()=>{
 
 window.addEventListener('resize', render);
 render();
+
+// ===== TARJA: acesso secreto de preview (?ver=lucas) =====
+if(new URLSearchParams(location.search).get('ver') === 'lucas'){
+  document.body.classList.remove('teaser-on');
+}
 </script>
 </body>
 </html>
